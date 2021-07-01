@@ -1,56 +1,86 @@
 defmodule CustomerWeb.CustomerController do
   use CustomerWeb, :controller
+  import Customer.Application.CustomerService
 
-  alias Customer.Context
-  alias Customer.Schemas.Customer
+  alias Customer.Domain.Entities.Customer, as: Customer
 
   def index(conn, _params) do
-    json conn, Context.list_customers
+    case list_customers() do
+      {:ok, customers} -> json conn, customers
+      _ -> json conn, []
+    end
   end
 
   def create(conn, _params) do
-    case Context.create_customer %Customer{name: conn.body_params["name"]} do
-      %{ name: name, id: id } -> json conn, %{"name" => name, "id" => id}
+    customerToCreate = %Customer{
+      name: conn.body_params["name"],
+      email: conn.body_params["email"],
+      taxId: conn.body_params["taxId"],
+      legalType: conn.body_params["legalType"]
+    }
+
+    case create customerToCreate do
+      {:ok, customer} ->
+        json conn, customer
+      {:error, error} ->
+        conn
+        |> put_status(400)
+        |> json(error)
     end
   end
 
   def show(conn, params) do
     %{"id" => id} = params
-    case Context.get_by_id id do
-      %{ name: name, id: id } -> json conn, %{"name" => name, "id" => id}
-      nil ->
+    case get_by_id id do
+      {:ok, customer} ->
+        json conn, customer
+      {:not_found, message} ->
         conn
         |> put_status(404)
-        |> json(%{"error" => "Not found"})
+        |> json(%{message: message})
     end
   end
 
-  def update(conn, _params) do
+  def update(conn, params) do
+    %{"id" => id} = params
+    attr_update = %Customer{
+      id: id,
+      name: conn.body_params["name"],
+      email: conn.body_params["email"],
+      taxId: conn.body_params["taxId"],
+      legalType: conn.body_params["legalType"]
+    }
 
-    attr_update = %{"name" => conn.body_params["name"], "email" => conn.body_params["email"], "taxId" => conn.body_params["taxId"], "legalType" => conn.body_params["legalType"]}
-
-    case Context.update_customer attr_update, conn.body_params["id"] do
-      { :ok, %Customer{} = customer } ->
+    case update attr_update do
+      {:ok, customer} ->
         conn
-        |> json(%{"name" => customer.name, "id" => customer.id})
-      nil ->
+        |> json(customer)
+      {:not_found, message} ->
         conn
         |> put_status(404)
-        |> json(%{"error" => "Not found"})
+        |> json(message)
+      {:error, error} ->
+        conn
+        |> put_status(400)
+        |> json(error)
     end
   end
 
   def delete(conn, params) do
     %{"id" => id} = params
 
-    case Context.delete_customer id do
-      { :ok, %Customer{} = _customer } ->
+    case delete id do
+      { :ok } ->
         conn
         |> json(%{message: "ok"})
-      nil ->
+      {:not_found, message} ->
         conn
         |> put_status(404)
-        |> json(%{"error" => "Not found"})
+        |> json(message)
+      {:error, error} ->
+        conn
+        |> put_status(400)
+        |> json(error)
     end
   end
 end

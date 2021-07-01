@@ -1,4 +1,4 @@
-defmodule Customer.Schemas.Customer do
+defmodule Customer.Infrastructure.Schemas.Customer do
   use Ecto.Schema
   import Ecto.Changeset
 

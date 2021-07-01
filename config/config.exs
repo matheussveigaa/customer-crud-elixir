@@ -8,7 +8,7 @@
 use Mix.Config
 
 config :customer,
-  ecto_repos: [Customer.Schemas.Customer.Repo]
+  ecto_repos: [Customer.Repo]
 
 # Configures the endpoint
 config :customer, CustomerWeb.Endpoint,
@@ -25,6 +25,8 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
+config :customer, :customer_repository, Customer.Infrastructure.Persistence.Repository.CustomerRepositoryImpl
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

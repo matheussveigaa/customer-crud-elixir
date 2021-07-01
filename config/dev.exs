@@ -1,7 +1,7 @@
 use Mix.Config
 
 # Configure your database
-config :customer, Customer.Schemas.Customer.Repo,
+config :customer, Customer.Repo,
   username: "customer",
   password: "customer",
   database: "customer",

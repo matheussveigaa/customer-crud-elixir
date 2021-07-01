@@ -8,7 +8,7 @@ defmodule Customer.Application do
   def start(_type, _args) do
     children = [
       # Start the Ecto repository
-      Customer.Schemas.Customer.Repo,
+      Customer.Repo,
       # Start the Telemetry supervisor
       CustomerWeb.Telemetry,
       # Start the PubSub system
