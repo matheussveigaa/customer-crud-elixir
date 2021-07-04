@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-elixir
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: customer-elixir
+  template:
+    metadata:
+      labels:
+        app: customer-elixir
+    spec:
+      containers:
+      - name: customer-elixir
+        image: localhost:5000/customer-elixir:latest
+        imagePullPolicy: Always
+        env:
+          - name: DATABASE_URL
+            value: ecto://customer:customer@postgres/customer
+          - name: MIX_ENV
+            value: prod
+          - name: SECRET_KEY_BASE
+            value: f6aAUY2EqDEZE/7esccIXhzl3Q9hzWnWctqI0MtdlenTlP22OsdfErplPjQ2L2PT
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 4000
+

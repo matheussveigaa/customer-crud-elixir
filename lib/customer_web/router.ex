@@ -40,7 +40,7 @@ defmodule CustomerWeb.Router do
 
     scope "/" do
       pipe_through :browser
-      live_dashboard "/dashboard", metrics: CustomerWeb.Telemetry
+      live_dashboard "/dashboard", metrics: CustomerWeb.Telemetry, ecto_repos: [Customer.Repo]
     end
   end
 end
