@@ -21,9 +21,7 @@ services:
       DATABASE_URL: ecto://customer:customer@postgres/customer
       MIX_ENV: prod
       SECRET_KEY_BASE: f6aAUY2EqDEZE/7esccIXhzl3Q9hzWnWctqI0MtdlenTlP22OsdfErplPjQ2L2PT
-    mem_limit: 500m
-    cpus: 3
-    ports: 
+    ports:  
       - 80:4000
     networks: 
       - customer-network

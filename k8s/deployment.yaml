@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: customer-elixir
 spec:
-  replicas: 5
+  replicas: 3
   selector:
     matchLabels:
       app: customer-elixir
@@ -25,8 +25,8 @@ spec:
             value: f6aAUY2EqDEZE/7esccIXhzl3Q9hzWnWctqI0MtdlenTlP22OsdfErplPjQ2L2PT
         resources:
           limits:
-            memory: "128Mi"
-            cpu: "500m"
+            memory: "256Mi"
+            cpu: "2Gi"
         ports:
         - containerPort: 4000
 
